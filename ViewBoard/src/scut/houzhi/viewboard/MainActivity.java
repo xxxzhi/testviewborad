@@ -1,13 +1,8 @@
 package scut.houzhi.viewboard;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import scut.houzhi.view.RotateViewGroup;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -28,6 +23,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				Log.i("open","isOpend:"+viewGroup.isOpened());
 				if(viewGroup.isOpened())
 					viewGroup.close();
 				else
