@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		final ViewGroup group = (ViewGroup)findViewById(R.id.group);
 		
-		final RotateViewGroup viewGroup = new RotateViewGroup(group);
+		final RotateViewGroup viewGroup = new RotateViewGroup(group,true);
 		group.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

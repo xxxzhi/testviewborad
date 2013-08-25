@@ -7,29 +7,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 
 public class RotateViewGroup {
 	private ViewGroup viewGroup ;
+	private Random random = new Random(500);
 	
-	
-	public RotateViewGroup(ViewGroup viewGroup){
+	public RotateViewGroup(ViewGroup viewGroup,boolean init){
 		this.viewGroup = viewGroup;
+		this.isOpened = init;
 	}
 	/**
 	 * 旋转动画
 	 * @author houzhi
 	 *
 	 */
-	static class MyRotateAnimation extends AnimationSet{
+	 class MyRotateAnimation extends AnimationSet{
 		private final long durationMillis = 1000;
 
 		/**
@@ -40,7 +39,7 @@ public class RotateViewGroup {
 		 * @param yPivot 相对于空间top
 		 */
 		public MyRotateAnimation(float toXDelta,
-				float toYDelta,float xPivot,float yPivot){
+				float toYDelta,int xPivot,int yPivot){
 			super(true);
 			
 			//初始化动画
@@ -48,7 +47,7 @@ public class RotateViewGroup {
 		}
 		
 		public MyRotateAnimation(float fromXDelta, float toXDelta,
-				float fromYDelta, float toYDelta,float xPivot,float yPivot){
+				float fromYDelta, float toYDelta,int xPivot,int yPivot){
 			super(true);
 			
 			//初始化动画
@@ -56,23 +55,23 @@ public class RotateViewGroup {
 		}
 		
 		private void initAnimation(float fromXDelta, float toXDelta,
-				float fromYDelta, float toYDelta,float xPivot,float yPivot){
+				float fromYDelta, float toYDelta,int xPivot,int yPivot){
 			TranslateAnimation translateAnimation 
 				= new TranslateAnimation(fromXDelta, toXDelta, fromYDelta, toYDelta);
 			
-			translateAnimation.setDuration(durationMillis);
-//			translateAnimation.setFillEnabled(true);
-			translateAnimation.setFillAfter(true);
-//			addAnimation(translateAnimation);
+			addAnimation(translateAnimation);
 			
-			float toDegrees = new Random().nextFloat()*360;
-			RotateAnimation rotateAnimation = new RotateAnimation(0, toDegrees,xPivot,yPivot);
-			
-			translateAnimation.setDuration(durationMillis);
-			translateAnimation.setFillAfter(true);
+			int toDegrees = random.nextInt(360);
+			Log.i(TAG,toDegrees+"");
+			RotateAnimation rotateAnimation = 
+					new RotateAnimation(0, toDegrees,
+							RotateAnimation.RELATIVE_TO_SELF,0.5f,
+							RotateAnimation.RELATIVE_TO_SELF,0.5f);
 			addAnimation(rotateAnimation);
+			
 			setFillAfter(true);
-			setFillEnabled(true);
+			setDuration(durationMillis);
+//			setFillEnabled(true);
 		}
 
 		@Override
@@ -87,7 +86,7 @@ public class RotateViewGroup {
 		
 	}
 	
-	
+	private static final String TAG = "rotateViewGroup";
 	public boolean isOpened(){
 		return isOpened;
 	}
@@ -132,8 +131,8 @@ public class RotateViewGroup {
 	class Nums{
 		float transX;
 		float transY;
-		float pivotX;
-		float pivotY;
+		int pivotX;
+		int pivotY;
 	}
 	MyRotateAnimation myRotateAnimation ;
 	/**
@@ -143,14 +142,6 @@ public class RotateViewGroup {
 		if(isOpened)
 			return ;
 		System.out.println(myRotateAnimation==null?"animaiton isnull":"not null");
-		if(myRotateAnimation!=null){
-			myRotateAnimation.setFillBefore(true);
-			myRotateAnimation.cancel();
-		}
-//		for(int i = 0;i!=viewGroup.getChildCount();++i){
-//			View child = viewGroup.getChildAt(i);
-//			child.clearAnimation();
-//		}
 		
 		for(int i = 0;i!=viewGroup.getChildCount();++i){
 			View child = viewGroup.getChildAt(i);
